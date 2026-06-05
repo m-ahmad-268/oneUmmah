@@ -1,0 +1,72 @@
+.ant-popover-inner-content {
+  padding: 0 !important;
+}
+
+
+.ant-picker {
+  height: 48px !important;
+  /* padding: 10px !important; */
+}
+
+.ant-select-selector {
+  min-height: 48px !important;
+}
+
+.ant-input[disabled] {
+  background-color: #f5f5f5 !important;
+}
+
+.customHeader .ant-modal-header {
+  /* color: white; */
+  background-color: #8231D3 !important;
+
+}
+
+.customHeader .ant-modal-close-x:hover {
+  background-color: #ffffff15;
+}
+
+.customHeader .ant-modal-title {
+  color: white;
+}
+
+.customHeader .ant-modal-close-x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: red !important; */
+  border-radius: 50%;
+  line-height: 1;
+  font-size: 14px;
+  /* background-color: transparent; */
+}
+
+.customHeader .ant-modal-close {
+  color: white;
+}
+
+
+.ant-select-disabled .ant-select-selector {
+  background-color: #f5f5f5 !important;
+  color: black !important;
+
+  /* removes dull effect */
+}
+
+/* .ant-input:focus,
+.ant-input-focused, */
+.ant-input-status-error:not(.ant-input-disabled) {
+  border-color: red !important;
+  /* box-shadow: none !important; */
+}
+
+.border-box {
+  border: 2px solid #f5f5f5;
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.bgClr {
+  margin-top: 10px !important;
+}
