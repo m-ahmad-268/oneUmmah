@@ -3,7 +3,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import UilEllipsisV from '@iconscout/react-unicons/icons/uil-ellipsis-v';
-import { Button, Col, Layout, Row, Spin, message } from 'antd';
+import { Button, Col, Layout, Row } from 'antd';
 import propTypes from 'prop-types';
 import { Scrollbars } from '@pezhmanparsaee/react-custom-scrollbars';
 import { connect } from 'react-redux';
@@ -22,7 +22,6 @@ const ThemeLayout = (WrappedComponent) => {
   function LayoutComponent({ layoutMode, rtl, topMenu }) {
     const [collapsed, setCollapsed] = useState(false);
     const [hide, setHide] = useState(true);
-    const [loading, setLoading] = useState(true);
 
     // Handle resizing
     useEffect(() => {
@@ -34,39 +33,6 @@ const ThemeLayout = (WrappedComponent) => {
       return () => window.removeEventListener('resize', updateDimensions);
     }, []);
 
-    // Refresh access token on mount
-    useEffect(() => {
-      const refreshAccessToken = async () => {
-        try {
-          const storedRefresh = localStorage.getItem('refresh_token_admin');
-          const storedAccess = localStorage.getItem('access_token_admin');
-          if (!storedRefresh || !storedAccess) return;
-          const response = await fetch(`${process.env.REACT_APP_API_URL}auth/refresh-token`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${storedAccess}`,
-            },
-            body: JSON.stringify({ refreshToken: storedRefresh }),
-          });
-          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-
-          const data = await response.json();
-          if (data.accessToken) {
-            localStorage.setItem('access_token_admin', data.accessToken);
-            console.log('✅ Access token refreshed');
-          }
-        } catch (error) {
-          console.error('⚠ Failed to refresh token:', error);
-          window.location.href = `${process.env.REACT_APP_URL}sign-in?error=token-expired`;
-          localStorage.clear();
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      refreshAccessToken();
-    }, []);
 
     const toggleCollapsed = () => setCollapsed(!collapsed);
     const toggleCollapsedMobile = () => {
@@ -112,18 +78,7 @@ const ThemeLayout = (WrappedComponent) => {
       return <div style={{ ...style, ...thumbStyle }} />;
     };
 
-    return (loading) ? (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-        }}
-      >
-        <Spin size="large" />
-      </div>
-    ) : (
+    return (
       <LayoutContainer>
         <Layout className="layout">
           <Header
@@ -142,8 +97,8 @@ const ThemeLayout = (WrappedComponent) => {
                     to="/"
                   >
                     <img
-                      src={`${process.env.PUBLIC_URL}/logo.png`}
-                      alt="Zarbotics"
+                      src="https://oneummah.org.uk/logos/logo.svg?dpl=dpl_2YAp9eoJ4a5HT3PnPEYbGaJQiRRW"
+                      alt="OneUmmah"
                       style={{ height: '42px', width: 'auto', maxWidth: '180px', objectFit: 'contain' }}
                     />
                     {/* Zarbotics Events */}
@@ -166,11 +121,10 @@ const ThemeLayout = (WrappedComponent) => {
                       </div>
                     </div>
                     {!topMenu || window.innerWidth <= 991 ? (
-                      <Button type="link" onClick={toggleCollapsed} style={{ color: layoutMode === 'lightMode' ? '#ffffff' : undefined }}>
+                      <Button type="link" onClick={toggleCollapsed}>
                         <img
                           src={require(`../static/img/icon/${collapsed ? 'left-bar.svg' : 'left-bar.svg'}`)}
                           alt="menu"
-                          style={{ filter: layoutMode === 'lightMode' ? 'brightness(0) invert(1)' : undefined }}
                         />
                       </Button>
                     ) : null}
@@ -232,7 +186,7 @@ const ThemeLayout = (WrappedComponent) => {
                 <Row>
                   <Col md={24} xs={24}>
                     <span className="admin-footer__copyright">
-                      © 2026 - <Link to="#">Zarbotics</Link>
+                      © 2026 - <Link to="#">OneUmmah</Link>
                     </span>
                   </Col>
                 </Row>

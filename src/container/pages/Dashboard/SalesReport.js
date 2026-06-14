@@ -133,7 +133,7 @@ const SalesReport = React.memo(({ title }) => {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
   // --- Function to prepare data for export (CSV/XLSX/Print) ---

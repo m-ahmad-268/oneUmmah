@@ -40,7 +40,7 @@ const TopSellingProduct = React.memo(() => {
     const fetchEventStats = async () => {
       try {
         // const response = await fetch(`${process.env.REACT_APP_API_URL}eventMaster/getEventStats`, {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}analytics/summary`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}analytics`, {
           method: 'GET', // Assuming POST based on previous API calls
           headers: {
             'Content-Type': 'application/json',

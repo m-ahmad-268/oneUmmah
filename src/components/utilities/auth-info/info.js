@@ -42,7 +42,7 @@ const AuthInfo = React.memo(() => {
       }
     };
 
-    getUserStatus();
+    // getUserStatus();
   }, []);
 
   useEffect(() => {
@@ -145,7 +145,7 @@ const AuthInfo = React.memo(() => {
     (
       false ? <></> :
         <InfoWraper>
-          <Notification />
+          {/* <Notification /> */}
           <div className="ninjadash-nav-actions__item ninjadash-nav-actions__author">
             <Popover placement="bottomRight" content={userContent} action="click" autoAdjustOverflow={false}>
               <Link to="#" className="ninjadash-nav-action-link"

@@ -6,9 +6,12 @@ const InfoWraper = Styled.div`
     align-items: center;
     .ninjadash-nav-action-link{
         text-decoration: none;
-        color: ${({ theme }) => theme[theme.mainContent].secondary};
+        color: ${({ theme }) => theme[theme.mainContent]['white-text']};
         box-shadow: none;
         padding: 0px 8px;
+        svg path {
+            fill: ${({ theme }) => theme[theme.mainContent]['white-text']};
+        }
     }
     
     .ninjadash-nav-actions__searchbar{

@@ -176,7 +176,7 @@ const SalesGrowth = React.memo(() => {
       }
     };
 
-    fetchSalesGrowthData();
+    // fetchSalesGrowthData();
   }, []); // Run once on component mount
 
   const salesGrowthDataset = [

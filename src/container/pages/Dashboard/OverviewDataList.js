@@ -43,7 +43,7 @@ const OverviewDataList = React.memo(({ column }) => {
         const eventApiData = await eventResponse.json();
 
         // --- NEW API Call 3: Event Budget Summary for Total Sales ---
-        const salesResponse = await fetch(`${process.env.REACT_APP_API_URL}analytics/summary`, {
+        const salesResponse = await fetch(`${process.env.REACT_APP_API_URL}analytics`, {
           // const salesResponse = await fetch(`${process.env.REACT_APP_API_URL}eventBudget/summary`, {
           method: 'GET',
           headers: {
@@ -146,7 +146,7 @@ const OverviewDataList = React.memo(({ column }) => {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
   // Ensure "Total Sales" (ID 3) is included in the displayed items.

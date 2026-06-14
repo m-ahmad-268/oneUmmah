@@ -88,23 +88,17 @@ const NotificationBox = React.memo(() => {
   };
 
   useEffect(() => {
-    // fetchNotifications();
-    let intervalId;
-    if (accessToken) {
-      intervalId = setInterval(getAllNotification, 15000);
+    // let intervalId;
+    // if (accessToken) {
+    //   intervalId = setInterval(getAllNotification, 15000);
 
-    }
+    // }
 
-
-    // const interval = setInterval(getAllNotification, 30000); // every 10s
-    // return () => clearInterval(interval);
-
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
+    // return () => {
+    //   if (intervalId) {
+    //     clearInterval(intervalId);
+    //   }
+    // };
 
   }, [accessToken]);
 
@@ -166,7 +160,7 @@ const NotificationBox = React.memo(() => {
           </div>
         ) : (
           <ul className="ninjadash-top-dropdown__nav notification-list"
-            // style={{ backgroundColor: 'red' }}
+          // style={{ backgroundColor: 'red' }}
           >
             {notifications.length === 0 ? (
               <li style={{ padding: '10px', textAlign: 'center', listStyle: 'none' }}>No notifications</li>

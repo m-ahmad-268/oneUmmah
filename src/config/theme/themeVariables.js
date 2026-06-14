@@ -2,10 +2,10 @@ import themes from './themeConfigure.js';
 
 const { lightMode, darkMode } = themes;
 
-const primaryColor = '#6B2FA0';
-const primaryHover = '#542587';
-const secondaryColor = '#5840FF';
-const secondaryHover = '#3520C8';
+const primaryColor = '#3da7dc';
+const primaryHover = '#2b8fc4';
+const secondaryColor = '#1a6b9c';
+const secondaryHover = '#145580';
 const linkColor = '#1890ff';
 const linkHover = '#0d79df';
 const successColor = '#01B81A';
@@ -111,7 +111,7 @@ const theme = {
 
   // Layout
   'layout-body-background': '#F4F5F7',
-  'layout-header-background': '#ffffff',
+  'layout-header-background': '#3da7dc',
   'layout-footer-background': '#fafafa',
   'layout-header-height': '64px',
   'layout-header-padding': '0 15px',

@@ -12,6 +12,7 @@ import Admin from './routes/admin';
 import SignIn from './container/pages/SignIn';
 import ProtectedRoute from './components/utilities/protectedRoute';
 import Register from './container/pages/Register';
+import { AuthProvider } from './context/AuthContext';
 
 const NotFound = lazy(() => import('./container/pages/404'));
 const { themeColor } = config;
@@ -36,19 +37,21 @@ function App() {
     <Provider store={store}>
       <AppThemeProvider>
         <Router basename={process.env.PUBLIC_URL}>
-          <Routes>
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/*"
-              element={
-                <ProtectedRoute>
-                  <Admin />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AuthProvider>
+            <Routes>
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/*"
+                element={
+                  <ProtectedRoute>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AuthProvider>
         </Router>
       </AppThemeProvider>
     </Provider>

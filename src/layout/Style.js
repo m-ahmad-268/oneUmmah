@@ -99,7 +99,7 @@ const LayoutContainer = Styled.div`
         .ninjadash-header-content__left{
             min-width: 280px;
             padding: 0 20px 0 30px;
-            background-color: ${({ theme }) => theme[theme.mainContent]['brand-background']};
+            background: ${({ theme }) => theme[theme.mainContent]['brand-background']};
             @media only screen and (max-width: 1499px){
                 min-width: 220px;
             }
@@ -171,7 +171,7 @@ const LayoutContainer = Styled.div`
                         img {
                             width: 16px;
                             height: 16px;
-                            color: ${({ theme }) => theme[theme.mainContent]['light-text']}};
+                            color: ${({ theme }) => theme[theme.mainContent]['white-text']};
                         }
                         i,
                         svg{
@@ -273,7 +273,7 @@ const LayoutContainer = Styled.div`
     header{
         box-shadow: 0 5px 20px ${({ theme }) => theme['extra-light-color']}05;
         z-index: 998;
-        background-color: ${({ theme }) => theme[theme.mainContent]['white-background']};
+        background: ${({ theme }) => theme[theme.mainContent]['brand-background']};
         @media print {
             display: none;
         }

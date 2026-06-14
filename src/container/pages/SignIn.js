@@ -3,10 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthFormWrap } from './style';
 import { Checkbox } from '../../components/checkbox/checkbox';
+import { useAuth } from '../../context/AuthContext';
 
 function SignIn() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false); // Manages loading state for the button
+  const { setAuth } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [form] = Form.useForm();
   const [state, setState] = useState(false);
 
@@ -16,12 +18,9 @@ function SignIn() {
       const { email, password } = values;
 
       state ? localStorage.setItem('loggedData', JSON.stringify(values)) : localStorage.removeItem('loggedData');
-
       const response = await fetch(`${process.env.REACT_APP_API_URL}auth/login`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
@@ -35,14 +34,22 @@ function SignIn() {
         } else {
           message.error(data.message || `An unexpected HTTP error occurred: ${response.status}`);
         }
-
         throw new Error(data.message || `HTTP error! Status: ${response.status}`);
       }
 
-      if (data.code === 200 && data.status === 'OK' && data.result) {
-        localStorage.setItem('access_token_admin', data.result.accessToken);
-        localStorage.setItem('refresh_token_admin', data.result.refreshToken);
-        console.log('✅ Access token and refresh token stored successfully!');
+      if (data.success && data.data) {
+        const { accessToken, refreshToken, user: userData } = data.data;
+
+        localStorage.setItem('access_token_admin', accessToken);
+        localStorage.setItem('refresh_token_admin', refreshToken);
+        localStorage.setItem('user_data', JSON.stringify(userData));
+
+        setAuth({
+          user: userData,
+          role: userData.roles?.[0] ?? null,
+          permissions: userData.permissions ?? [],
+        });
+
         message.success('Login successful! Redirecting...');
         navigate('/');
       } else {
@@ -96,8 +103,7 @@ function SignIn() {
           <AuthFormWrap>
             <div className="ninjadash-authentication-top">
               <h2 className="ninjadash-authentication-top__title">
-                Welcome to Zarbotics Events
-                {/* Sign in To Zarbotics Workspace */}
+                Welcome to One Ummah
               </h2>
             </div>
             <div className="ninjadash-authentication-content">

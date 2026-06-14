@@ -40,43 +40,6 @@ function ProtectedRoute({ children }) {
     }
   }, [navigate, location]);
 
-  const refreshAccessToken = async () => {
-    try {
-      const storedRefresh = localStorage.getItem('refresh_token_admin');
-      const storedAccess = localStorage.getItem('access_token_admin');
-      if (!storedRefresh || !storedAccess) return;
-
-      console.log('Attempting to Refresh Token');
-
-      const response = await fetch(`${process.env.REACT_APP_API_URL}auth/refresh-token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${storedAccess}`,
-        },
-        body: JSON.stringify({ refreshToken: storedRefresh }),
-      });
-
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      const data = await response.json();
-      if (data.accessToken) {
-        localStorage.setItem('access_token_admin', data.accessToken);
-        console.log('✅ Access token refreshed');
-      }
-    } catch (error) {
-      console.error('⚠ Failed to refresh token:', error);
-      window.location.href = `${process.env.REACT_APP_URL}sign-in?error=token-expired`;
-      localStorage.clear();
-    }
-  };
-
-  // Refresh token every 14 minutes
-  useEffect(() => {
-    if (localStorage.getItem('access_token_admin') && localStorage.getItem('refresh_token_admin')) {
-      const interval = setInterval(refreshAccessToken, 100000);
-      return () => clearInterval(interval);
-    }
-  }, []);
 
   if (!isReady) return null; // Wait until token check is done
 

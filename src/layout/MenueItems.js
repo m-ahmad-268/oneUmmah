@@ -1,19 +1,13 @@
-// src/layout/MenueItems.js
-
 import {
-  UilUsersAlt,
   UilCreateDashboard,
-  UilCalendarAlt,
-  UilUtensils,
-  UilTruck,
-  UilBuilding,
-  UilPalette,
-  UilStar,
-  UilAlignCenter,
-  UilTagAlt,
+  UilChart,
+  UilQrcodeScan,
+  UilUserCircle,
+  UilMessage,
+  UilAnalysis,
 } from '@iconscout/react-unicons';
 
-import { Calendar, Menu } from 'antd';
+import { Menu } from 'antd';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -26,20 +20,12 @@ function MenuItems({ toggleCollapsed }) {
   const { t } = useTranslation();
 
   function getItem(label, key, icon, children, type) {
-    return {
-      key,
-      icon,
-      children,
-      label,
-      type,
-    };
+    return { key, icon, children, label, type };
   }
 
-  const { topMenu } = useSelector((state) => {
-    return {
-      topMenu: state.ChangeLayoutMode.topMenu,
-    };
-  });
+  const { topMenu } = useSelector((state) => ({
+    topMenu: state.ChangeLayoutMode.topMenu,
+  }));
 
   const path = '';
   const pathName = window.location.pathname;
@@ -69,229 +55,75 @@ function MenuItems({ toggleCollapsed }) {
         null,
       ),
     ]),
+
     getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/event-stats`}>
-        Events
+      <NavLink onClick={toggleCollapsed} to={`${path}/campaigns`}>
+        Campaigns
       </NavLink>,
-      'event-stats',
+      'campaigns',
       !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/events`}>
-          <UilCalendarAlt />
+        <NavLink className="menuItem-iocn" to={`${path}/campaigns`}>
+          <UilChart />
         </NavLink>
       ),
     ),
+
     getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/events`}>
-        Event Types
+      <NavLink onClick={toggleCollapsed} to={`${path}/qr-codes`}>
+        QR Codes
       </NavLink>,
-      'events',
+      'qr-codes',
       !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/events`}>
-          <UilCalendarAlt />
+        <NavLink className="menuItem-iocn" to={`${path}/qr-codes`}>
+          <UilQrcodeScan />
         </NavLink>
       ),
     ),
+
     getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/calender-schedule`}>
-        Calender
+      <NavLink onClick={toggleCollapsed} to={`${path}/donors`}>
+        Donors
       </NavLink>,
-      'Calender',
+      'donors',
       !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/calender-schedule`}>
-          <UilCalendarAlt />
+        <NavLink className="menuItem-iocn" to={`${path}/donors`}>
+          <UilUserCircle />
         </NavLink>
       ),
     ),
+
     getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/customers`}>
-        Customers
+      <NavLink onClick={toggleCollapsed} to={`${path}/broadcasts`}>
+        Broadcasts
       </NavLink>,
-      'customers',
+      'broadcasts',
       !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/customers`}>
-          <UilUsersAlt />
+        <NavLink className="menuItem-iocn" to={`${path}/broadcasts`}>
+          <UilMessage />
         </NavLink>
       ),
     ),
+
     getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/caterings`}>
-        Catering
-      </NavLink>,
-      'caterings',
-      !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/caterings`}>
-          <UilUtensils />
-        </NavLink>
-      ),
-    ),
-    getItem('Menu Management', 'menu-dropdown', !topMenu && <UilUtensils />, [
-      // getItem(
-      //   <NavLink onClick={toggleCollapsed} to={`${path}/menu-category`}>
-      //     Item Category
-      //   </NavLink>,
-      //   'menu-category',
-      // ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/menu-management`}>
-          Menu Item
-        </NavLink>,
-        'foodItems',
-        // !topMenu && <UilAlignCenter />,
-      ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/menu-composition`}>
-          Menu Composition
-        </NavLink>,
-        'menu-composition',
-      ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/itinerary-type`}>
-          Itinerary Type
-        </NavLink>,
-        'itinerary-type',
-        // !topMenu && (
-        //   <NavLink className="menuItem-iocn" to={`${path}/itinerary-type`}>
-        //     <UilUtensils />
-        //   </NavLink>
-        // ),
-      ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/itinerary-item`}>
-          Itinerary Item
-        </NavLink>,
-        'itinerary-item',
-        // !topMenu && (
-        //   <NavLink className="menuItem-iocn" to={`${path}/itinerary-item`}>
-        //     <UilUtensils />
-        //   </NavLink>
-        // ),
-      ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/itinerary-assignment`}>
-          Itinerary Assignment
-        </NavLink>,
-        'itinerary-assignment',
-        // !topMenu && (
-        //   <NavLink className="menuItem-iocn" to={`${path}/itinerary-assignment`}>
-        //     <UilUtensils />
-        //   </NavLink>
-        // ),
-      ),
-      // getItem(
-      //   <NavLink onClick={toggleCollapsed} to={`${path}/price-setup`}>
-      //     Price Version
-      //   </NavLink>,
-      //   'price-setup',
-      //   !topMenu && (
-      //     <NavLink className="menuItem-iocn" to={`${path}/price-setup`}>
-      //       <UilCalendarAlt />
-      //     </NavLink>
-      //   ),
-      // ),
-      // getItem(
-      //   <NavLink onClick={toggleCollapsed} to={`${path}/price-assignment`}>
-      //     Price Assignment
-      //   </NavLink>,
-      //   'price-assignment',
-      //   // !topMenu && (
-      //   //   <NavLink className="menuItem-iocn" to={`${path}/price-setup`}>
-      //   //     <UilCalendarAlt />
-      //   //   </NavLink>
-      //   // ),
-      // ),
-    ]),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}/menu-management`}>
-    //     Menu Management
-    //   </NavLink>,
-    //   'MenuManagement',
-    //   !topMenu && (
-    //     <NavLink className="menuItem-iocn" to={`${path}/menu-management`}>
-    //       <UilUtensils />
-    //     </NavLink>
-    //   ),
-    // ),
-    // getItem(
-    //   <NavLink onClick={toggleCollapsed} to={`${path}/food-menu`}>
-    //     Food Menu
-    //   </NavLink>,
-    //   'foodMenu',
-    //   !topMenu && (
-    //     <NavLink className="menuItem-iocn" to={`${path}/food-menu`}>
-    //       <UilUtensils />
-    //     </NavLink>
-    //   ),
-    // ),
-    // --- Services item ---
-    getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/decor-services`}>
-        Service
-      </NavLink>,
-      'decor-services',
-      !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/decor-services`}>
-          <UilUtensils />
-        </NavLink>
-      ),
-    ),
-    getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/vendors`}>
-        Vendors
-      </NavLink>,
-      'vendors',
-      !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/vendors`}>
-          <UilTruck />
-        </NavLink>
-      ),
-    ),
-    getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/venues`}>
-        Venues
-      </NavLink>,
-      'venues',
-      !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/venues`}>
-          <UilBuilding />
-        </NavLink>
-      ),
-    ),
-    // --- The new Decor Dropdown ---
-    getItem('Decor', 'decor-dropdown', !topMenu && <UilPalette />, [
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/decor`}>
-          Categories
-        </NavLink>,
-        'decor',
-        // !topMenu && <UilAlignCenter />,
-      ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/decor-properties`}>
-          {/* Properties */}
-          Decor Items
-        </NavLink>,
-        'decor-properties',
-        // !topMenu && <UilTagAlt />,
-      ),
-      getItem(
-        <NavLink onClick={toggleCollapsed} to={`${path}/decor-property-values`}>
-          Item Values
-        </NavLink>,
-        'decor-property-values',
-        // !topMenu && <UilPalette />,
-      ),
-    ]),
-    // --- The Extras item with its own icon ---
-    getItem(
-      <NavLink onClick={toggleCollapsed} to={`${path}/decor-extras`}>
-        Extras
-      </NavLink>,
-      'decor-extras',
-      !topMenu && (
-        <NavLink className="menuItem-iocn" to={`${path}/decor-extras`}>
-          <UilStar />
-        </NavLink>
-      ),
+      'Analytics',
+      'analytics',
+      !topMenu && <UilAnalysis />,
+      [
+        getItem(
+          <NavLink onClick={toggleCollapsed} to={`${path}/analytics/funnel`}>
+            Conversion Funnel
+          </NavLink>,
+          'analytics-funnel',
+          null,
+        ),
+        getItem(
+          <NavLink onClick={toggleCollapsed} to={`${path}/analytics/donors`}>
+            Donor Insights
+          </NavLink>,
+          'analytics-donors',
+          null,
+        ),
+      ],
     ),
   ];
 
@@ -300,13 +132,9 @@ function MenuItems({ toggleCollapsed }) {
       onOpenChange={onOpenChange}
       onClick={onClick}
       mode={!topMenu || window.innerWidth <= 991 ? 'inline' : 'horizontal'}
-      // eslint-disable-next-line no-nested-ternary
       defaultSelectedKeys={
         !topMenu
-          ? [
-            `${mainPathSplit.length === 1 ? 'home' : mainPathSplit.length === 2 ? mainPathSplit[1] : mainPathSplit[2]
-            }`,
-          ]
+          ? [`${mainPathSplit.length === 1 ? 'home' : mainPathSplit.length === 2 ? mainPathSplit[1] : mainPathSplit[2]}`]
           : []
       }
       defaultOpenKeys={!topMenu ? [`${mainPathSplit.length > 2 ? mainPathSplit[1] : 'dashboard'}`] : []}
