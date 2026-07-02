@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Table, Tag, Select, Input, Modal, Statistic, Row, Col, message, Popconfirm } from 'antd';
+import UilPlus from '@iconscout/react-unicons/icons/uil-plus';
+import UilEdit from '@iconscout/react-unicons/icons/uil-edit';
 import { PageHeader } from '../../../components/page-headers/page-headers';
 import { Main, CardToolbox } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
@@ -13,6 +16,7 @@ const { Option } = Select;
 const STATUS_COLORS = { ACTIVE: 'success', INACTIVE: 'default' };
 
 function QRCodes() {
+  const navigate = useNavigate();
   const [qrCodes, setQrCodes] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +69,8 @@ function QRCodes() {
   const handleToggleStatus = async (record) => {
     const newStatus = record.status === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
     try {
-      await record?.qrId && patchQrStatus(record.qrId, newStatus);
+      if (!record?.qrId) return;
+      await patchQrStatus(record.qrId, newStatus);
       message.success(`QR code ${newStatus === 'ACTIVE' ? 'activated' : 'deactivated'}`);
       fetchQrCodes(pagination.current);
     } catch {
@@ -98,13 +103,21 @@ function QRCodes() {
           <Button size="small" type="default" onClick={() => record?.qrId && openStats(record.qrId)}>
             View Stats
           </Button>
-          {record?.qrImageUrl && (
+          {/* <Button
+            size="small"
+            type="primary"
+            onClick={() => record?.qrId && navigate(`/qr-codes/${record.qrId}/edit`)}
+            title="Edit"
+          >
+            <UilEdit size={14} />
+          </Button> */}
+          {/* {record?.qrImageUrl && (
             <Button size="small" type="default">
               <a href={record.qrImageUrl} download target="_blank" rel="noreferrer">
                 Download
               </a>
             </Button>
-          )}
+          )} */}
           <PermissionGate permission="QR_MANAGE">
             <Popconfirm
               title={`${record.status === 'ACTIVE' ? 'Deactivate' : 'Activate'} this QR code?`}
@@ -125,7 +138,15 @@ function QRCodes() {
   return (
     <>
       <CardToolbox>
-        <PageHeader ghost title="QR Codes" />
+        <PageHeader
+          ghost
+          title="QR Codes"
+          buttons={[
+            <Button key="create" type="primary" size="default" onClick={() => navigate('/qr-codes/new')}>
+              <UilPlus /> New QR Code
+            </Button>,
+          ]}
+        />
       </CardToolbox>
       <Main>
         <Cards headless>
@@ -138,7 +159,7 @@ function QRCodes() {
               onChange={(v) => setFilters((f) => ({ ...f, campaignId: v }))}
             >
               {campaigns.map((c) => (
-                <Option key={c.id} value={c.id}>{c.name}</Option>
+                <Option key={c.campaignId} value={c.campaignId}>{c.name}</Option>
               ))}
             </Select>
             <Select
@@ -151,13 +172,13 @@ function QRCodes() {
               <Option value="ACTIVE">Active</Option>
               <Option value="INACTIVE">Inactive</Option>
             </Select>
-            <Input
+            {/* <Input
               placeholder="Search by city"
               style={{ width: 180 }}
               value={filters.placementCity}
               onChange={(e) => setFilters((f) => ({ ...f, placementCity: e.target.value }))}
               allowClear
-            />
+            /> */}
           </div>
 
           <Table
@@ -171,6 +192,7 @@ function QRCodes() {
               total: pagination.total,
               onChange: fetchQrCodes,
             }}
+            scroll={{ x: 900 }}
           />
         </Cards>
       </Main>

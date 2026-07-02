@@ -1,91 +1,84 @@
 import React, { lazy, Suspense, useState, useEffect } from 'react';
 import { Row, Col, Skeleton, message } from 'antd';
 import { PageHeader } from '../../../components/page-headers/page-headers';
-import { Cards } from '../../../components/cards/frame/cards-frame';
 import { Main } from '../../styled';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { getDashboardAnalytics } from '../../../services/analyticsService';
+import { getCampaigns } from '../../../services/campaignService';
 
-const OverviewDataList = lazy(() => import('./OverviewDataList.js'));
-const SalesReport = lazy(() => import('./SalesReport'));
-const SalesGrowth = lazy(() => import('./SalesGrowth'));
-// const SalesByLocation = lazy(() => import('./SalesByLocation'));
+const SummaryCards = lazy(() => import('./SummaryCards'));
+const RevenueChart = lazy(() => import('./RevenueChart'));
 const TopSellingProduct = lazy(() => import('./TopSellingProducts'));
 
+const CardSkeleton = <Skeleton active paragraph={{ rows: 4 }} />;
+
 function Dashboard() {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [loading, setLoading] = useState(true);
+  const [summary, setSummary] = useState({});
+  const [revenueByDay, setRevenueByDay] = useState([]);
+  const [topCampaigns, setTopCampaigns] = useState([]);
+  const [totalCampaigns, setTotalCampaigns] = useState(0);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token_admin');
-    const refreshToken = localStorage.getItem('refresh_token_admin');
+    const load = async () => {
+      try {
+        const [analyticsRes, campaignsRes] = await Promise.all([
+          getDashboardAnalytics(),
+          getCampaigns({ size: 1 }),
+        ]);
 
-    if (!accessToken || !refreshToken) {
-      navigate(location.pathname('/sign-in'));
-    }
-  }, [navigate, location]);
+        const data = analyticsRes?.data ?? analyticsRes ?? {};
+        setSummary(data.summary ?? {});
+        setRevenueByDay(data.revenueByDay ?? []);
+        setTopCampaigns(data.topCampaigns ?? []);
 
-  const PageRoutes = [
-    {
-      path: 'index',
-      breadcrumbName: 'Dashboard',
-    },
-    {
-      path: 'first',
-      breadcrumbName: 'Statistics',
-    },
-  ];
+        const total =
+          campaignsRes?.data?.totalElements ??
+          campaignsRes?.data?.content?.length ??
+          0;
+        setTotalCampaigns(total);
+      } catch {
+        message.error('Failed to load dashboard data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
   return (
     <>
       <PageHeader className="ninjadash-page-header-main" title="Dashboard" routes={[]} />
-      {/* <PageHeader className="ninjadash-page-header-main" title="Dashboard" routes={PageRoutes} /> */}
-
       <Main>
-        <Row gutter={10} style={{ padding: '10px' }}>
-          <Col xxl={12} xs={24}>
-            <Suspense
-              fallback={
-                <Cards headless>
-                  <Skeleton active />
-                </Cards>
-              }
-            >
-              <OverviewDataList />
-            </Suspense>
-          </Col>
-          <Col xxl={12} xs={24}>
-            <Suspense
-              fallback={
-                <Cards headless>
-                  <Skeleton active />
-                </Cards>
-              }
-            >
-              <SalesReport />
-            </Suspense>
-          </Col>
-          {/* <Col md={24} style={{ display: 'flex', backgroundColor: 'red', justifyContent: 'center' }}>
-            <Suspense
-              fallback={
-                <Cards headless>
-                  <Skeleton active />
-                </Cards>
-              }
-            >
-              <SalesGrowth />
-            </Suspense>
-          </Col> */}
-          <Col md={24}>
-            <Suspense
-              fallback={
-                <Cards headless>
-                  <Skeleton active />
-                </Cards>
-              }
-            >
-              <TopSellingProduct />
-            </Suspense>
-          </Col>
-        </Row>
+        <div style={{ padding: '10px' }}>
+          {loading ? (
+            <>
+              <Skeleton active paragraph={{ rows: 3 }} style={{ marginBottom: 24 }} />
+              <Skeleton active paragraph={{ rows: 8 }} />
+            </>
+          ) : (
+            <>
+              {/* Stat cards */}
+              <Suspense fallback={CardSkeleton}>
+                <SummaryCards summary={summary} totalCampaigns={totalCampaigns} />
+              </Suspense>
+
+              {/* Chart + Top Campaigns */}
+              <Row gutter={[16, 16]}>
+                <Col xxl={14} xs={24}>
+                  <Suspense fallback={CardSkeleton}>
+                    <RevenueChart revenueByDay={revenueByDay} />
+                  </Suspense>
+                </Col>
+                <Col xxl={10} xs={24}>
+                  <Suspense fallback={CardSkeleton}>
+                    <TopSellingProduct topCampaigns={topCampaigns} />
+                  </Suspense>
+                </Col>
+              </Row>
+            </>
+          )}
+        </div>
       </Main>
     </>
   );

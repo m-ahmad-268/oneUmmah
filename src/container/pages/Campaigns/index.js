@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Tag, Space, Select, Skeleton, Popconfirm, message, Row, Col } from 'antd';
+import { Table, Tag, Space, Select, Skeleton, message, Row, Col } from 'antd';
 import UilPlus from '@iconscout/react-unicons/icons/uil-plus';
 import UilEye from '@iconscout/react-unicons/icons/uil-eye';
-import UilEdit from '@iconscout/react-unicons/icons/uil-edit';
-import UilTrashAlt from '@iconscout/react-unicons/icons/uil-trash-alt';
-import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 
 import { PageHeader } from '../../../components/page-headers/page-headers';
@@ -13,11 +10,7 @@ import { Main, CardToolbox } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
 import { Button } from '../../../components/buttons/buttons';
 import PermissionGate from '../../../components/utilities/PermissionGate';
-import {
-  getCampaigns,
-  deleteCampaign,
-  patchCampaignStatus,
-} from '../../../services/campaignService';
+import { getCampaigns } from '../../../services/campaignService';
 
 const { Option } = Select;
 
@@ -73,37 +66,6 @@ function CampaignsList() {
     fetchData(pag.current, pag.pageSize);
   };
 
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: 'Delete Campaign?',
-      text: 'This action cannot be undone.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Yes, delete',
-      confirmButtonColor: '#ff4d4f',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deleteCampaign(id);
-          message.success('Campaign deleted');
-          fetchData(pagination.current, pagination.pageSize);
-        } catch {
-          message.error('Failed to delete campaign');
-        }
-      }
-    });
-  };
-
-  const handleStatusChange = async (id, status) => {
-    try {
-      await patchCampaignStatus(id, status);
-      message.success(`Campaign ${status.toLowerCase()}d`);
-      fetchData(pagination.current, pagination.pageSize);
-    } catch {
-      message.error('Failed to update campaign status');
-    }
-  };
-
   const columns = [
     {
       title: 'Name',
@@ -112,7 +74,7 @@ function CampaignsList() {
       render: (text, record) => (
         <span
           style={{ cursor: 'pointer', color: '#3da7dc', fontWeight: 500 }}
-          onClick={() => navigate(`/campaigns/${record.id}`)}
+          onClick={() => navigate(`/campaigns/${record.campaignId}`)}
         >
           {text}
         </span>
@@ -123,7 +85,7 @@ function CampaignsList() {
       dataIndex: 'type',
       key: 'type',
       render: (val) => (
-        <Tag color={val === 'SPONSORSHIP' ? 'blue' : 'cyan'}>
+        <Tag style={{ backgroundColor: val === 'SPONSORSHIP' ? '#1890ff' : '#13c2c2' }}>
           {val?.replace('_', ' ')}
         </Tag>
       ),
@@ -132,7 +94,7 @@ function CampaignsList() {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (val) => <Tag color={STATUS_COLORS[val] ?? 'default'}>{val}</Tag>,
+      render: (val) => <Tag style={{ backgroundColor: '#fa8c16' }}>{val}</Tag>,
     },
     {
       title: 'Category',
@@ -161,80 +123,14 @@ function CampaignsList() {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => (
-        <Space size="small">
-          <Button
-            size="small"
-            type="default"
-            onClick={() => record?.campaignId && navigate(`/campaigns/${record.campaignId}`)}
-            title="View"
-          >
-            <UilEye size={14} />
-          </Button>
-
-          <PermissionGate permission="CAMPAIGN_EDIT">
-            {(record.status === 'DRAFT' || record.status === 'PAUSED') && (
-              <Button
-                size="small"
-                type="primary"
-                onClick={() => record?.campaignId && navigate(`/campaigns/${record.campaignId}/edit`)}
-                title="Edit"
-              >
-                <UilEdit size={14} />
-              </Button>
-            )}
-          </PermissionGate>
-
-          <PermissionGate permission="CAMPAIGN_LAUNCH">
-            {record.status === 'DRAFT' || record.status === 'SCHEDULED' ? (
-              <Popconfirm
-                title="Launch this campaign? This will send live WhatsApp messages."
-                onConfirm={() => record?.campaignId && handleStatusChange(record.campaignId, 'ACTIVE')}
-                okText="Launch"
-                okType="primary"
-              >
-                <Button size="small" type="primary" style={{ background: '#52c41a', borderColor: '#52c41a' }}>
-                  Launch
-                </Button>
-              </Popconfirm>
-            ) : null}
-            {record.status === 'ACTIVE' ? (
-              <Popconfirm
-                title="Pause this campaign?"
-                onConfirm={() => record?.campaignId && handleStatusChange(record.campaignId, 'PAUSED')}
-                okText="Pause"
-              >
-                <Button size="small" style={{ background: '#fa8b0c', borderColor: '#fa8b0c', color: '#fff' }}>
-                  Pause
-                </Button>
-              </Popconfirm>
-            ) : null}
-            {(record.status === 'ACTIVE' || record.status === 'PAUSED') ? (
-              <Popconfirm
-                title="Close this campaign permanently?"
-                onConfirm={() => record?.campaignId && handleStatusChange(record.campaignId, 'CLOSED')}
-                okText="Close"
-                okType="danger"
-              >
-                <Button size="small" danger>
-                  Close
-                </Button>
-              </Popconfirm>
-            ) : null}
-          </PermissionGate>
-
-          <PermissionGate permission="CAMPAIGN_DELETE">
-            {record.status !== 'ACTIVE' && (
-              <Button
-                size="small"
-                danger
-                onClick={() => record?.campaignId && handleDelete(record.campaignId)}
-                title="Delete"
-              >
-                <UilTrashAlt size={14} />
-              </Button>
-            )}
-          </PermissionGate>
-        </Space>
+        <Button
+          size="small"
+          type="default"
+          onClick={() => record?.campaignId && navigate(`/campaigns/${record.campaignId}`)}
+          title="View"
+        >
+          <UilEye size={14} />
+        </Button>
       ),
     },
   ];

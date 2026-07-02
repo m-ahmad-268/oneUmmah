@@ -169,7 +169,7 @@ function BroadcastsList() {
               total: pagination.total,
               onChange: fetchBroadcasts,
             }}
-            scroll={{ x: 900 }}
+            scroll={{ x: 1200 }}
           />
         </Cards>
       </Main>

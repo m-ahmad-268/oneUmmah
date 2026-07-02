@@ -8,7 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { PageHeader } from '../../../components/page-headers/page-headers';
 import { Main, CardToolbox } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
@@ -20,16 +20,16 @@ function DonorInsights() {
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(false);
   const [dateRange, setDateRange] = useState([
-    dayjs().subtract(30, 'day'),
-    dayjs(),
+    moment().subtract(30, 'days'),
+    moment(),
   ]);
 
   const fetchInsights = async () => {
     setLoading(true);
     try {
       const res = await getDonorInsights({
-        from: dateRange[0].toISOString(),
-        to: dateRange[1].toISOString(),
+        from: dateRange[0].format('YYYY-MM-DD'),
+        to: dateRange[1].format('YYYY-MM-DD'),
       });
       setInsights(res?.data ?? res);
     } catch {

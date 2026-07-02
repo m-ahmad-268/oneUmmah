@@ -19,7 +19,8 @@ import { Main, CardToolbox } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
 import { Button } from '../../../components/buttons/buttons';
 import PermissionGate from '../../../components/utilities/PermissionGate';
-import { getCampaignById, patchCampaignStatus } from '../../../services/campaignService';
+import Swal from 'sweetalert2';
+import { getCampaignById, patchCampaignStatus, deleteCampaign } from '../../../services/campaignService';
 
 const STATUS_COLORS = {
   DRAFT: 'default',
@@ -49,6 +50,27 @@ function CampaignDetail() {
   };
 
   useEffect(() => { load(); }, [id]);
+
+  const handleDelete = () => {
+    Swal.fire({
+      title: 'Delete Campaign?',
+      text: 'This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete',
+      confirmButtonColor: '#ff4d4f',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteCampaign(id);
+          message.success('Campaign deleted');
+          navigate('/campaigns');
+        } catch {
+          message.error('Failed to delete campaign');
+        }
+      }
+    });
+  };
 
   const handleStatusChange = async (status) => {
     setActioning(true);
@@ -198,6 +220,13 @@ function CampaignDetail() {
               {(c.status === 'DRAFT' || c.status === 'PAUSED') && (
                 <Button type="primary" onClick={() => navigate(`/campaigns/${id}/edit`)}>
                   Edit
+                </Button>
+              )}
+            </PermissionGate>,
+            <PermissionGate key="delete" permission="CAMPAIGN_DELETE">
+              {c.status !== 'ACTIVE' && (
+                <Button danger onClick={handleDelete}>
+                  Delete
                 </Button>
               )}
             </PermissionGate>,

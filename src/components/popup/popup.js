@@ -10,7 +10,13 @@ function Popover(props) {
   const content1 = <Content>{content}</Content>;
 
   return (
-    <PopoverStyle placement={placement} title={title && <Title>{title}</Title>} content={content1} trigger={action}>
+    <PopoverStyle
+      placement={placement}
+      title={title && <Title>{title}</Title>}
+      content={content1}
+      trigger={action}
+      overlayClassName="ninjadash-dropdown-popover"
+    >
       {children}
     </PopoverStyle>
   );

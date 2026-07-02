@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, DatePicker, Select, Statistic, Spin, message } from 'antd';
-import dayjs from 'dayjs';
+import moment from 'moment';
 import { PageHeader } from '../../../components/page-headers/page-headers';
 import { Main, CardToolbox } from '../../styled';
 import { Cards } from '../../../components/cards/frame/cards-frame';
@@ -27,8 +27,8 @@ function ConversionFunnel() {
   const [loading, setLoading] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
   const [dateRange, setDateRange] = useState([
-    dayjs().subtract(30, 'day'),
-    dayjs(),
+    moment().subtract(30, 'days'),
+    moment(),
   ]);
   const [campaignId, setCampaignId] = useState(undefined);
 
@@ -42,8 +42,8 @@ function ConversionFunnel() {
     setLoading(true);
     try {
       const params = {
-        from: dateRange[0].toISOString(),
-        to: dateRange[1].toISOString(),
+        from: dateRange[0].format('YYYY-MM-DD'),
+        to: dateRange[1].format('YYYY-MM-DD'),
       };
       if (campaignId) params.campaignId = campaignId;
       const res = await getFunnelAnalytics(params);
@@ -75,13 +75,13 @@ function ConversionFunnel() {
             />
             <Select
               allowClear
-              placeholder="All Campaigns"
+              placeholder="Campaigns"
               style={{ width: 220 }}
               value={campaignId}
               onChange={setCampaignId}
             >
               {campaigns.map((c) => (
-                <Option key={c.id} value={c.id}>{c.name}</Option>
+                <Option key={c.campaignId} value={c.campaignId}>{c.name}</Option>
               ))}
             </Select>
           </div>

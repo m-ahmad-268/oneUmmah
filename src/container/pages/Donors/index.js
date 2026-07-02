@@ -49,7 +49,8 @@ function DonorsList() {
   const handleOptOut = async (record) => {
     const newOptOut = !record.broadcastOptedOut;
     try {
-      await patchDonorOptOut(record.id, newOptOut);
+      if (!record?.donorId) return;
+      await patchDonorOptOut(record.donorId, newOptOut);
       message.success(`Donor ${newOptOut ? 'opted out' : 'opted back in'} successfully`);
       fetchDonors(pagination.current);
     } catch {
@@ -85,7 +86,7 @@ function DonorsList() {
       key: 'actions',
       render: (_, record) => (
         <div style={{ display: 'flex', gap: 8 }}>
-          <Button size="small" type="default" onClick={() => navigate(`/donors/${record.id}`)}>
+          <Button size="small" type="default" onClick={() => record?.donorId && navigate(`/donors/${record.donorId}`)}>
             View Profile
           </Button>
           <PermissionGate permission="DONOR_OPT_OUT">
@@ -144,7 +145,7 @@ function DonorsList() {
           </div>
 
           <Table
-            rowKey="id"
+            rowKey="donorId"
             loading={loading}
             dataSource={donors}
             columns={columns}
@@ -154,6 +155,7 @@ function DonorsList() {
               total: pagination.total,
               onChange: fetchDonors,
             }}
+             scroll={{ x: 1000 }}
           />
         </Cards>
       </Main>

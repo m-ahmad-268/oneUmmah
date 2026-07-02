@@ -7,8 +7,9 @@ const CampaignsList = lazy(() => import('../../container/pages/Campaigns/index')
 const CampaignForm = lazy(() => import('../../container/pages/Campaigns/CampaignForm'));
 const CampaignDetail = lazy(() => import('../../container/pages/Campaigns/CampaignDetail'));
 
-// QR Code screen
+// QR Code screens
 const QRCodes = lazy(() => import('../../container/pages/QRCodes/index'));
+const QRCodeForm = lazy(() => import('../../container/pages/QRCodes/QRCodeForm'));
 
 // Donor screens
 const DonorsList = lazy(() => import('../../container/pages/Donors/index'));
@@ -40,6 +41,8 @@ function PagesRoute() {
 
       {/* QR Codes */}
       <Route path="qr-codes" element={<QRCodes />} />
+      <Route path="qr-codes/new" element={<QRCodeForm />} />
+      <Route path="qr-codes/:qrId/edit" element={<QRCodeForm />} />
 
       {/* Donors */}
       <Route path="donors" element={<DonorsList />} />

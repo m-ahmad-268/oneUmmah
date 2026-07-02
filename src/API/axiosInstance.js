@@ -75,7 +75,9 @@ instance.interceptors.response.use(
                 localStorage.removeItem('access_token_admin');
                 localStorage.removeItem('refresh_token_admin');
                 localStorage.removeItem('user_data');
-                window.location.href = '/sign-in';
+                window.location.href = `${process.env.REACT_APP_URL}sign-in?error=token-expired`;
+                localStorage.clear();
+                // window.location.href = 'admin/sign-in';
                 return Promise.reject(error);
             } finally {
                 isRefreshing = false;
